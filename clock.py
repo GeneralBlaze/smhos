@@ -46,7 +46,7 @@ class DisplayWindow(QWidget):
             screen_geometry = QGuiApplication.primaryScreen().geometry()
 
         # Set label size based on secondary screen dimensions
-        self.label_width_ratio = 1  # 100% of the screen width
+        self.label_width_ratio = 0.9  # 90% of the screen width
         self.label_height_ratio = 0.9  # 50% of the screen height
         self.label = QLabel("00:00:00", self)
         self.label.setFont(QFont("Arial", int(screen_geometry.width() * self.label_width_ratio) // 5, QFont.Weight.Bold))  # Adjust font size dynamically
