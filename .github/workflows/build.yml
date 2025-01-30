@@ -21,7 +21,7 @@ jobs:
           pip install pyinstaller
 
       - name: Build Executable
-        run: pyinstaller --onefile --windowed --name TimerApp clock.py
+        run: pyinstaller --onefile --windowed --name ClockApp ../smhos/clock.py
 
       - name: Upload Executable
         uses: actions/upload-artifact@v3
