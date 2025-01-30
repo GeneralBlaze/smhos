@@ -10,6 +10,9 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      - name: Display Directory Structure (Debugging)
+        run: tree /F /A
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -19,14 +22,18 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pyinstaller
+          pip install -r smhos/requirements.txt  # Ensure all dependencies are installed
 
       - name: Build Executable
         run: |
-          cd smhos  # Move into the smhos directory
+          cd smhos  # Change to the correct directory
           pyinstaller --onefile --windowed --name TimerApp clock.py
+
+      - name: Verify Build Output (Debugging)
+        run: dir smhos\dist
 
       - name: Upload Executable
         uses: actions/upload-artifact@v3
         with:
           name: TimerApp
-          path: smhos/dist/TimerApp.exe  # Adjusted path for the .exe output
+          path: smhos/dist/TimerApp.exe  # Ensure correct path
