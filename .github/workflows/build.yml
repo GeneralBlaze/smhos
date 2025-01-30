@@ -1,39 +1,40 @@
 name: Build Windows Executable
 
-on: [push]
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4  # Updated to latest version
+    - name: Checkout Repository
+      uses: actions/checkout@v4
 
-      - name: Display Directory Structure (Debugging)
-        run: tree /F /A
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller
+        if (Test-Path smhos/requirements.txt) { pip install -r smhos/requirements.txt }
+      shell: pwsh  # Use PowerShell (Windows Shell)
 
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pyinstaller
-          pip install -r smhos/requirements.txt  # Ensure all dependencies are installed
+    - name: Build Executable with PyInstaller
+      run: |
+        pyinstaller --onefile --windowed --name clock smhos/clock.py
+      shell: pwsh
 
-      - name: Build Executable
-        run: |
-          cd smhos  # Change to the correct directory
-          pyinstaller --onefile --windowed --name TimerApp clock.py
-
-      - name: Verify Build Output (Debugging)
-        run: dir smhos\dist
-
-      - name: Upload Executable
-        uses: actions/upload-artifact@v4  # Updated to latest version
-        with:
-          name: TimerApp
-          path: smhos/dist/TimerApp.exe  # Ensure correct path
+    - name: Upload Executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: Windows-Executable
+        path: dist/clock.exe
