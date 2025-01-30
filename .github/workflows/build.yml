@@ -21,10 +21,10 @@ jobs:
           pip install pyinstaller
 
       - name: Build Executable
-        run: pyinstaller --onefile --windowed --name TimerApp main.py
+        run: pyinstaller --onefile --windowed --name TimerApp clock.py
 
       - name: Upload Executable
         uses: actions/upload-artifact@v3
         with:
-          name: TimerApp
-          path: dist/TimerApp.exe
+          name: ClockApp
+          path: dist/Clock.exe
